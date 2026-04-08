@@ -49,4 +49,4 @@ export const LANGUAGE_CODES: Record<Language, string> = {
 };
 
 export const LEGAL_AUTHORITY_FOOTER =
-  "\n\n---\nSource: Fedlex (fedlex.admin.ch). Note: Only the official version published in the Official Compilation (RO/AS) is legally authoritative.";
+  "\n\n---\nSource: Fedlex (fedlex.admin.ch). This is not an official publication. Only the publication of the Federal Chancellery is authoritative.";
