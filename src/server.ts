@@ -143,7 +143,7 @@ export function createFedlexServer(): Server {
       {
         name: "list_amendments",
         description:
-          "List amendments to a Swiss federal act on Fedlex. Only covers amendments from 2021 onwards.",
+          "List recent amendments to a Swiss federal act from the Official Compilation (RO/AS) on Fedlex. Use to check what has changed in a law over a given period.",
         inputSchema: {
           type: "object" as const,
           properties: {
@@ -153,7 +153,7 @@ export function createFedlexServer(): Server {
             },
             since: {
               type: "string",
-              description: "Start date in YYYY-MM-DD format (default: 1 year ago). Coverage starts 2021.",
+              description: "Start date in YYYY-MM-DD format (default: 1 year ago)",
             },
             language: {
               type: "string",
