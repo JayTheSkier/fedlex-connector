@@ -67,7 +67,7 @@ export function createFedlexServer(): Server {
       {
         name: "search_by_title",
         description:
-          "Search Swiss federal legislation titles in the Classified Compilation (RS/SR) on Fedlex. Use to find the RS number of a law when you know its name but not its number. Searches titles only, not article content.",
+          "Search Swiss federal legislation titles in the Classified Compilation (RS/SR) on Fedlex. Use to find the RS number of a law when you know its name but not its number. Searches titles only, not article content. Returns only acts currently in force.",
         inputSchema: {
           type: "object" as const,
           properties: {

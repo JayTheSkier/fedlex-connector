@@ -152,8 +152,9 @@ export async function getFilestoreHtmlUrls(
 
 
 /**
- * Search for acts by title keywords.
- * Queries ConsolidationAbstract resources that have titles matching the keywords.
+ * Search for acts by title keywords. Returns only acts currently in force:
+ * Fedlex stamps repealed abstracts with jolux:dateNoLongerInForce, and we
+ * exclude any abstract that has that predicate set.
  *
  * RS numbers are resolved via the legal-taxonomy (skos:notation) which works for
  * both older and newer acts, unlike jolux:historicalLegalId which is absent on 2024+ acts.
@@ -179,6 +180,7 @@ export async function searchByTitle(
       FILTER(DATATYPE(?rsId) = <https://fedlex.data.admin.ch/vocabulary/notation-type/id-systematique>)
       ?expr jolux:title ?title ;
             jolux:language <${langUri}> .
+      FILTER NOT EXISTS { ?abstract jolux:dateNoLongerInForce ?notInForce }
       ${filters}
     } ORDER BY ?rsId LIMIT 50
   `;
