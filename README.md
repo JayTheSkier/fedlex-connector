@@ -60,7 +60,7 @@ curl https://your-domain/health
 
 ### `search_by_title`
 
-Search Swiss federal legislation titles in the Classified Compilation (RS/SR).
+Search Swiss federal legislation titles in the Classified Compilation (RS/SR). Returns only acts currently in force.
 
 | Parameter  | Type              | Required | Description                          |
 |------------|-------------------|----------|--------------------------------------|
