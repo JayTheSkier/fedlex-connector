@@ -4,6 +4,15 @@ import { makeFedlexError } from "./types.js";
 // Rate limiter shared with SPARQL (separate bucket for filestore)
 let filestoreTimestamps: number[] = [];
 const MAX_REQUESTS_PER_SECOND = 10;
+const FETCH_TIMEOUT_MS = 15_000;
+
+// Safety caps for fetchMultiPart. Measured ceiling: RS 220 (Code des
+// Obligations, the largest act in the Classified Compilation) is 12 parts
+// and ~31 MB of raw HTML. These limits give ~3x headroom on both axes and
+// exist to prevent runaway growth if Fedlex misbehaves or the placeholder
+// heuristic misfires.
+const MAX_MULTIPART_PARTS = 100;
+const MAX_MULTIPART_BYTES = 100 * 1024 * 1024;
 
 async function rateLimit(): Promise<void> {
   const now = Date.now();
@@ -21,6 +30,7 @@ export async function fetchHtml(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: { Accept: "text/html" },
     redirect: "follow",
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
 
   if (!response.ok) {
@@ -51,6 +61,7 @@ async function tryFetchHtml(url: string): Promise<string | null> {
   const response = await fetch(url, {
     headers: { Accept: "text/html" },
     redirect: "follow",
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
 
   if (response.status === 404) return null;
@@ -106,9 +117,10 @@ export async function fetchAllHtmlParts(urls: string[]): Promise<{ html: string;
 async function fetchMultiPart(baseUrl: string, extension: string): Promise<{ html: string; warning?: string }> {
   const parts: string[] = [];
   let partNum = 1;
+  let totalBytes = 0;
   let warning: string | undefined;
 
-  while (true) {
+  while (partNum <= MAX_MULTIPART_PARTS) {
     const url = `${baseUrl}-${partNum}${extension}`;
     let html: string | null;
     try {
@@ -130,7 +142,17 @@ async function fetchMultiPart(baseUrl: string, extension: string): Promise<{ htm
     }
 
     parts.push(html);
+    totalBytes += html.length;
     partNum++;
+
+    if (totalBytes >= MAX_MULTIPART_BYTES) {
+      warning = `WARNING: The text may be incomplete. Stopped after ${(totalBytes / 1024 / 1024).toFixed(1)} MB (safety limit). Parts 1\u2013${parts.length} were retrieved successfully.`;
+      break;
+    }
+  }
+
+  if (!warning && partNum > MAX_MULTIPART_PARTS) {
+    warning = `WARNING: The text may be incomplete. Stopped after ${MAX_MULTIPART_PARTS} parts (safety limit). Parts 1\u2013${parts.length} were retrieved successfully.`;
   }
 
   if (parts.length === 0) {

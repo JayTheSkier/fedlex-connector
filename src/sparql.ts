@@ -7,6 +7,7 @@ import {
 } from "./types.js";
 
 const SPARQL_ENDPOINT = "https://fedlex.data.admin.ch/sparqlendpoint";
+const SPARQL_TIMEOUT_MS = 15_000;
 
 const LANG_URI_MAP: Record<Language, string> = {
   fr: "http://publications.europa.eu/resource/authority/language/FRA",
@@ -44,6 +45,7 @@ export async function executeSparql(
       Accept: "application/sparql-results+json",
     },
     body: new URLSearchParams({ query }),
+    signal: AbortSignal.timeout(SPARQL_TIMEOUT_MS),
   });
 
   if (!response.ok) {
