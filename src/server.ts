@@ -143,7 +143,7 @@ export function createFedlexServer(): Server {
       {
         name: "list_amendments",
         description:
-          "List recent amendments to a Swiss federal act from the Official Compilation (RO/AS) on Fedlex. Use to check what has changed in a law over a given period.",
+          "List consolidation version dates for a Swiss federal act. Returns the dates each consolidated version took effect.",
         inputSchema: {
           type: "object" as const,
           properties: {
