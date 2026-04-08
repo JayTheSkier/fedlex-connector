@@ -30,7 +30,10 @@ async function startStdioServer() {
  * Each request gets a fresh server+transport pair (no session state).
  */
 async function startHttpServer(port: number) {
-  const app = createMcpExpressApp({ host: "0.0.0.0" });
+  const app = createMcpExpressApp({
+    host: "0.0.0.0",
+    allowedHosts: ["mcp.fedlex-connector.ch", "localhost", "127.0.0.1"],
+  });
 
   app.post("/", async (req: Request, res: Response) => {
     const server = createFedlexServer();
