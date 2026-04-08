@@ -1,0 +1,32 @@
+{
+  "name": "fedlex-connector",
+  "version": "1.0.0",
+  "description": "Fedlex Connector for accessing Swiss federal law",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "fedlex-connector": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "start:http": "PORT=3000 node build/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "fedlex",
+    "swiss-law"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cheerio": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2"
+  }
+}

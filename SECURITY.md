@@ -1,0 +1,1 @@
+If you discover a security vulnerability, please email jeremy@bacharach.ch.

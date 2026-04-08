@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fedlex Connector</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta property="og:title" content="Fedlex Connector">
+  <meta property="og:description" content="MCP server that gives Claude direct access to Swiss federal legislation on Fedlex.">
+  <meta property="og:image" content="https://fedlex-connector.ch/apple-touch-icon.png">
+  <meta property="og:url" content="https://fedlex-connector.ch/">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #111;
+      --dark: #333;
+      --mid: #666;
+      --light: #999;
+      --border: #ddd;
+      --bg: #fff;
+      --bg-code: #f6f6f6;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --black: #eee;
+        --dark: #ccc;
+        --mid: #bbb;
+        --light: #999;
+        --border: #333;
+        --bg: #111;
+        --bg-code: #1a1a1a;
+      }
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font);
+      color: var(--dark);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Layout ---- */
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      overflow-x: hidden;
+    }
+
+    section {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    /* ---- Header ---- */
+
+    header {
+      padding: 32px 0 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-family: "Jost", var(--font);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--black);
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      display: inline-block;
+      width: 51px;
+      height: 40px;
+      margin: -4px 0;
+      background: url(logo.svg) center/contain no-repeat;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .icon {
+        filter: invert(1);
+      }
+    }
+
+    header p {
+      font-family: "Jost", var(--font);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--mid);
+    }
+
+    header .links {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+      font-size: 0.875rem;
+    }
+
+    header .links a {
+      color: var(--dark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1px;
+      transition: border-color 0.2s;
+    }
+
+    header .links a:hover {
+      border-color: var(--dark);
+    }
+
+    /* ---- Typography ---- */
+
+    h2 {
+      font-family: "Jost", var(--font);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--light);
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    .subtle {
+      font-size: 0.825rem;
+      color: var(--light);
+    }
+
+    strong { font-weight: 600; color: var(--black); }
+
+    a {
+      color: var(--dark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    a:hover { border-color: var(--dark); }
+
+    /* ---- Code ---- */
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--bg-code);
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.8rem;
+    }
+
+    /* ---- Tools ---- */
+
+    .tool {
+      margin-bottom: 12px;
+    }
+
+    .tool:last-child { margin-bottom: 0; }
+
+    .tool h3 {
+      font-family: var(--mono);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 3px;
+    }
+
+    .tool p {
+      font-size: 0.925rem;
+      color: var(--mid);
+    }
+
+    /* ---- Steps ---- */
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 32px;
+      position: relative;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 1px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--light);
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .steps li strong {
+      display: block;
+      font-size: 0.925rem;
+      margin-bottom: 4px;
+    }
+
+    .steps li p {
+      font-size: 0.875rem;
+      color: var(--mid);
+      margin-bottom: 4px;
+    }
+
+    /* ---- TOC ---- */
+
+    .toc {
+      padding: 16px 0;
+      font-family: "Jost", var(--font);
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .toc ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      row-gap: 4px;
+    }
+
+    .toc li + li::before {
+      content: "|";
+      color: var(--border);
+      padding: 0 12px;
+    }
+
+    .toc a {
+      color: var(--light);
+      border-bottom: none;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--dark);
+    }
+
+    .toc-short { display: none; }
+
+    @media (max-width: 480px) {
+      .toc-full { display: none; }
+      .toc-short { display: inline; }
+    }
+
+    /* ---- Note ---- */
+
+    .note {
+      font-size: 0.85rem;
+      color: var(--light);
+      border-left: 2px solid var(--border);
+      padding-left: 16px;
+      margin-top: 12px;
+    }
+
+    /* ---- Footer ---- */
+
+    footer {
+      padding: 16px 0;
+      font-size: 0.8rem;
+      color: var(--light);
+    }
+
+    footer a { color: var(--light); }
+    footer a:hover { color: var(--dark); }
+
+    /* ---- Responsive ---- */
+
+    @media (max-width: 480px) {
+      header { padding: 24px 0 16px; }
+      section { padding: 16px 0; }
+      header h1 { font-size: 1.3rem; }
+      .diagram { font-size: 0.7rem; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1><span class="icon"></span>Fedlex Connector</h1>
+      <p>An MCP connector that gives Claude direct access to Swiss federal legislation on Fedlex.</p>
+    </header>
+
+    <nav class="toc">
+      <ol>
+        <li><a href="#what"><span class="toc-full">What it does</span><span class="toc-short">What</span></a></li>
+        <li><a href="#why"><span class="toc-full">Why it's needed</span><span class="toc-short">Why</span></a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#github">GitHub</a></li>
+        <li><a href="#about">About</a></li>
+      </ol>
+    </nav>
+
+    <!-- What -->
+    <section id="what">
+      <h2>What it does</h2>
+      <p>Fedlex Connector gives <a href="https://claude.ai">Claude</a> direct access to <a href="https://www.fedlex.admin.ch">Fedlex</a>, the official publication platform for Swiss federal law. It lets Claude query individual articles or whole acts from the Classified Compilation (RS/SR) in French, German, and Italian, and check what has changed in a law over time.</p>
+      <p>The result is less wasted reasoning and greater accuracy when using Claude for legal research within Swiss federal law.</p>
+    </section>
+
+    <!-- Why -->
+    <section id="why">
+      <h2>Why it's needed</h2>
+      <p>Claude cannot access the legal acts published on Fedlex, because the website relies on JavaScript, which Claude cannot execute. Without this connector, Claude resorts to workarounds (mirror sites, random PDFs, secondary sources), an approach that introduces potential inaccuracies and wastes reasoning power.</p>
+      <p>However, Fedlex does expose two machine-readable interfaces that work without JavaScript: a SPARQL endpoint for metadata and a static HTML filestore serving the consolidated legislation. This connector queries those interfaces, extracts the relevant text, and returns it to Claude in a structured format.</p>
+      <p>It works as an <a href="https://modelcontextprotocol.io">MCP</a> server: a lightweight protocol that lets Claude call external tools as part of its reasoning. Once connected, Claude can query Fedlex on its own whenever a conversation requires it.</p>
+    </section>
+
+    <!-- Setup -->
+    <section id="setup">
+      <h2>Setup</h2>
+      <p>The server is available at:</p>
+      <pre><code>https://mcp.fedlex-connector.ch</code></pre>
+
+      <p>On claude.ai, Desktop, or mobile: profile &rarr; Connectors &rarr; Add custom connector, paste the URL.</p>
+      <p>On Claude Code: <code>claude mcp add --transport http Fedlex-Connector https://mcp.fedlex-connector.ch</code></p>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools">
+      <h2>Tools</h2>
+
+      <div class="tool">
+        <h3>search_by_title</h3>
+        <p>Find a law by its name. Returns RS numbers and titles.</p>
+      </div>
+
+      <div class="tool">
+        <h3>get_law_text</h3>
+        <p>The primary tool. Retrieve a full act or a specific title/chapter, then locate relevant provisions in the text. Large acts are paginated automatically.</p>
+      </div>
+
+      <div class="tool">
+        <h3>get_article</h3>
+        <p>Retrieve a single article when you already know the exact article number. Supports historical versions by consolidation date.</p>
+      </div>
+
+      <div class="tool">
+        <h3>list_amendments</h3>
+        <p>List consolidation versions for an act over a given period. Shows what changed and when.</p>
+      </div>
+    </section>
+
+    <!-- GitHub -->
+    <section id="github">
+      <h2>GitHub</h2>
+      <p>The code is open source and available on <a href="https://github.com/JayTheSkier/fedlex-connector">GitHub</a>.</p>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <h2>About</h2>
+      <p>Built by Jeremy Bacharach. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;">&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;</a> &middot; <a href="https://www.linkedin.com/in/jeremy-bacharach-36bb97a8/">LinkedIn</a></p>
+      <p>Fedlex Connector is a private project and is not operated by the Swiss Confederation.</p>
+      <p>Feedback and contributions are welcome.</p>
+    </section>
+
+    <footer>
+      &copy; 2026 Jeremy Bacharach &middot; MIT License
+    </footer>
+
+  </div>
+
+
+</body>
+</html>
