@@ -239,6 +239,16 @@ async function handleSearchByTitle(args: Record<string, unknown>) {
     );
   }
 
+  // Each word becomes a SPARQL CONTAINS filter; cap to bound upstream query cost.
+  const wordCount = query.split(/\s+/).filter(Boolean).length;
+  if (wordCount > 20) {
+    return errorResponse(
+      makeFedlexError("INVALID_INPUT", `Too many search terms (${wordCount}); use up to 20.`, [
+        "Narrow your search to the most distinctive keywords.",
+      ])
+    );
+  }
+
   const results = await searchByTitle(query, language);
 
   if (results.length === 0) {
