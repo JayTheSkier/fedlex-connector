@@ -353,7 +353,7 @@
     <section id="what">
       <h2>What it does</h2>
       <p>Fedlex Connector gives <a href="https://claude.ai">Claude</a> direct access to <a href="https://www.fedlex.admin.ch">Fedlex</a>, the official publication platform for Swiss federal law. It lets Claude query individual articles or whole acts from the Classified Compilation (RS/SR) in French, German, and Italian. The result is less wasted reasoning and greater accuracy when using Claude for legal research within Swiss federal law.</p>
-      <p>Fedlex Connector is free to use and open source. It is a private project and not operated by or affiliated with the Swiss Confederation.</p>
+      <p>Fedlex Connector is free to use and open source. It is a private project, and it is not operated or maintained by the Swiss Confederation.</p>
     </section>
 
     <!-- Why -->
@@ -361,7 +361,7 @@
       <h2>Why it's needed</h2>
       <p>Claude cannot access the legal acts published on Fedlex, because the website relies on JavaScript, which Claude cannot execute. Without this connector, Claude resorts to workarounds (mirror sites, random PDFs, secondary sources), an approach that introduces potential inaccuracies and wastes reasoning power.</p>
       <p>However, Fedlex does expose two machine-readable interfaces that work without JavaScript: a SPARQL endpoint for metadata and a static HTML filestore serving the consolidated legislation. This connector queries those interfaces, extracts the relevant text, and returns it to Claude in a structured format.</p>
-      <p>It works as an <a href="https://modelcontextprotocol.io">MCP</a> server: a lightweight protocol that lets Claude call external tools as part of its reasoning. Once connected, Claude can query Fedlex on its own whenever a conversation requires it.</p>
+      <p>It works as an <a href="https://modelcontextprotocol.io">MCP</a> server, a lightweight protocol that lets Claude call external tools as part of its reasoning. Once connected, Claude can query Fedlex on its own whenever a conversation requires it.</p>
     </section>
 
     <!-- Setup -->
