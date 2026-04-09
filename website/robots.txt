@@ -1,0 +1,9 @@
+# Fedlex Connector — robots.txt
+# All crawlers allowed (search engines and AI training crawlers alike).
+# This is intentional: the project's purpose is to make Swiss federal law
+# discoverable, including via AI assistants.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://fedlex-connector.ch/sitemap.xml

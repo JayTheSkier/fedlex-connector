@@ -3,16 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fedlex Connector</title>
+
+  <title>Fedlex Connector – Swiss Federal Law for Claude (MCP)</title>
+  <meta name="description" content="Open-source MCP connector for Swiss federal legislation. Lets Claude search and retrieve acts and articles from Fedlex in German, French, and Italian.">
+  <link rel="canonical" href="https://fedlex-connector.ch/">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+  <meta http-equiv="content-language" content="en">
+  <meta name="author" content="Jeremy Bacharach">
+
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Open Graph: kept as-is to preserve existing chat-app preview (small square card). -->
   <meta property="og:title" content="Fedlex Connector">
   <meta property="og:description" content="MCP server that gives Claude direct access to Swiss federal legislation on Fedlex.">
   <meta property="og:image" content="https://fedlex-connector.ch/apple-touch-icon.png">
+  <meta property="og:image:width" content="180">
+  <meta property="og:image:height" content="180">
+  <meta property="og:image:alt" content="Fedlex Connector logo">
   <meta property="og:url" content="https://fedlex-connector.ch/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fedlex Connector">
+  <meta property="og:locale" content="en_GB">
+
+  <!-- Twitter Card: 'summary' = small square card, matching the OG preview style above. -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Fedlex Connector">
+  <meta name="twitter:description" content="MCP server that gives Claude direct access to Swiss federal legislation on Fedlex.">
+  <meta name="twitter:image" content="https://fedlex-connector.ch/apple-touch-icon.png">
+  <meta name="twitter:image:alt" content="Fedlex Connector logo">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
@@ -328,6 +350,81 @@
       .diagram { font-size: 0.7rem; padding: 14px; }
     }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://fedlex-connector.ch/#website",
+        "url": "https://fedlex-connector.ch/",
+        "name": "Fedlex Connector",
+        "description": "Open-source MCP connector that gives Claude direct access to Swiss federal legislation on Fedlex.",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://fedlex-connector.ch/#creator" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://fedlex-connector.ch/#webpage",
+        "url": "https://fedlex-connector.ch/",
+        "name": "Fedlex Connector – Swiss Federal Law for Claude (MCP)",
+        "description": "Open-source MCP connector for Swiss federal legislation. Lets Claude search and retrieve acts and articles from Fedlex in German, French, and Italian.",
+        "isPartOf": { "@id": "https://fedlex-connector.ch/#website" },
+        "primaryImageOfPage": { "@id": "https://fedlex-connector.ch/#logo" },
+        "inLanguage": "en",
+        "about": { "@id": "https://fedlex-connector.ch/#software" }
+      },
+      {
+        "@type": ["WebApplication", "SoftwareSourceCode"],
+        "@id": "https://fedlex-connector.ch/#software",
+        "name": "Fedlex Connector",
+        "alternateName": "Fedlex MCP Server",
+        "url": "https://fedlex-connector.ch/",
+        "description": "MCP server that exposes Swiss federal legislation (Classified Compilation, RS/SR) from Fedlex to Claude and other Model Context Protocol clients. Provides search by title, full-act retrieval, single-article lookup, and amendment history in German, French, and Italian.",
+        "applicationCategory": "DeveloperApplication",
+        "applicationSubCategory": "Model Context Protocol Server",
+        "operatingSystem": "Cross-platform",
+        "codeRepository": "https://github.com/JayTheSkier/fedlex-connector",
+        "programmingLanguage": "TypeScript",
+        "license": "https://opensource.org/licenses/MIT",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CHF"
+        },
+        "featureList": [
+          "Search Swiss federal legislation by title",
+          "Retrieve full acts and specific articles from the Classified Compilation (RS/SR)",
+          "List amendment history (consolidation versions) for any act",
+          "Connect to Claude.ai, Claude Desktop, and Claude Code via Model Context Protocol",
+          "Supports German, French, and Italian"
+        ],
+        "creator": { "@id": "https://fedlex-connector.ch/#creator" },
+        "image": { "@id": "https://fedlex-connector.ch/#logo" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://fedlex-connector.ch/#creator",
+        "name": "Jeremy Bacharach",
+        "sameAs": [
+          "https://github.com/JayTheSkier",
+          "https://www.linkedin.com/in/jeremy-bacharach-36bb97a8/"
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://fedlex-connector.ch/#logo",
+        "url": "https://fedlex-connector.ch/apple-touch-icon.png",
+        "contentUrl": "https://fedlex-connector.ch/apple-touch-icon.png",
+        "width": 180,
+        "height": 180,
+        "caption": "Fedlex Connector logo"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
