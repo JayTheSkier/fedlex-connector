@@ -2,7 +2,7 @@
 
 **Access Swiss Federal Law from Claude**
 
-A connector that gives Claude direct access to the official text of Swiss federal legislation on [Fedlex](https://www.fedlex.admin.ch), built on the [Model Context Protocol](https://modelcontextprotocol.io) (MCP). Covers all acts in the Classified Compilation (RS/SR) in French, German, and Italian.
+A connector that gives Claude direct access to the official text of Swiss federal legislation on [Fedlex](https://www.fedlex.admin.ch), built on the [Model Context Protocol](https://modelcontextprotocol.io) (MCP). Covers all acts in the Classified Compilation (SR, RS) in German, French, and Italian.
 
 ---
 
@@ -205,13 +205,15 @@ The server returns structured errors with codes and actionable suggestions:
 
 ## Known Limitations
 
+- **Full act historical versions:** `get_law_text` only retrieves full acts as they are currently in force and does not return past versions. For historical text, use `get_article`, which supports a `date` parameter.
+
 - **HTML availability:** Fedlex generally only provides HTML for consolidations from 2021 onwards. Older versions are only available as PDF or DOC on the Fedlex platform. The server returns a clear error with guidance when HTML is unavailable for a requested date.
 
 - **Rate limiting:** The SPARQL endpoint and filestore are public Swiss government services. The server limits itself to 10 requests/second per endpoint to be a responsible client.
 
 - **Section filtering:** The `section` parameter in `get_law_text` uses heading-text matching which works well for standard section names but may not match unusual headings. When filtering fails, the full act text is returned with a note.
 
-- **Language coverage:** Supports French (FR), German (DE), and Italian (IT). Romansch is not available. Not all acts have versions in all three languages.
+- **Language coverage:** Supports French (FR), German (DE), and Italian (IT). Romansch is not available.
 
 - **Scope:** Covers federal law in the Classified Compilation only. Cantonal law, the Federal Gazette, and court decisions are out of scope.
 
