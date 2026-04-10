@@ -65,7 +65,7 @@ Search Swiss federal legislation titles in the Classified Compilation (RS/SR). R
 | Parameter  | Type              | Required | Description                          |
 |------------|-------------------|----------|--------------------------------------|
 | `query`    | string            | Yes      | Keywords to match against act titles |
-| `language` | `fr` `de` `it`    | No       | Language for results (default: `fr`) |
+| `language` | `fr` `de` `it`    | No       | Language for results (default: `de`) |
 
 **Example:** Find the RS number for the data protection act.
 
@@ -82,7 +82,7 @@ Retrieve the official consolidated text of a specific article.
 |-------------|-------------------|----------|--------------------------------------------------|
 | `rs_number` | string            | Yes      | RS number (e.g. `"210"` for CC, `"220"` for CO)  |
 | `article`   | string            | Yes      | Article number (e.g. `"3"`, `"28a"`, `"260bis"`) |
-| `language`  | `fr` `de` `it`    | No       | Language (default: `fr`)                          |
+| `language`  | `fr` `de` `it`    | No       | Language (default: `de`)                          |
 | `date`      | string            | No       | Consolidation date (YYYY-MM-DD); defaults to latest |
 
 **Example:** Retrieve art. 1 CC in German.
@@ -100,7 +100,7 @@ Retrieve the full text of an act or a specific title/chapter. This is the primar
 |-------------|-------------------|----------|------------------------------------------------------|
 | `rs_number` | string            | Yes      | RS number                                             |
 | `section`   | string            | No       | Limit to a title/chapter (e.g. `"Titre huitième"`)   |
-| `language`  | `fr` `de` `it`    | No       | Language (default: `fr`)                               |
+| `language`  | `fr` `de` `it`    | No       | Language (default: `de`)                               |
 | `page`      | number            | No       | Page for paginated results (default: 1)                |
 
 Large acts are paginated automatically (splitting at article boundaries). Each response includes the total page count.
@@ -120,7 +120,7 @@ List recent amendments (consolidation versions) for a given act.
 |-------------|-------------------|----------|--------------------------------------------|
 | `rs_number` | string            | Yes      | RS number                                   |
 | `since`     | string            | No       | Start date, YYYY-MM-DD (default: 1 year ago)|
-| `language`  | `fr` `de` `it`    | No       | Language for titles (default: `fr`)          |
+| `language`  | `fr` `de` `it`    | No       | Language for titles (default: `de`)          |
 
 **Example:** Check recent changes to the CO.
 

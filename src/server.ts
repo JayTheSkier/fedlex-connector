@@ -78,7 +78,7 @@ export function createFedlexServer(): Server {
             language: {
               type: "string",
               enum: ["fr", "de", "it"],
-              description: "Language for results (default: fr)",
+              description: "Language for results (default: de)",
             },
           },
           required: ["query"],
@@ -102,7 +102,7 @@ export function createFedlexServer(): Server {
             language: {
               type: "string",
               enum: ["fr", "de", "it"],
-              description: "Language (default: fr)",
+              description: "Language (default: de)",
             },
             date: {
               type: "string",
@@ -130,7 +130,7 @@ export function createFedlexServer(): Server {
             language: {
               type: "string",
               enum: ["fr", "de", "it"],
-              description: "Language (default: fr)",
+              description: "Language (default: de)",
             },
             page: {
               type: "number",
@@ -158,7 +158,7 @@ export function createFedlexServer(): Server {
             language: {
               type: "string",
               enum: ["fr", "de", "it"],
-              description: "Language for amendment titles (default: fr)",
+              description: "Language for amendment titles (default: de)",
             },
           },
           required: ["rs_number"],
@@ -479,12 +479,12 @@ async function handleListAmendments(args: Record<string, unknown>) {
 // --- Helpers ---
 
 function validateLanguage(lang: string | undefined): Language {
-  if (!lang) return "fr";
+  if (!lang) return "de";
   const normalized = lang.toLowerCase().trim();
   if (normalized === "fr" || normalized === "de" || normalized === "it") {
     return normalized;
   }
-  return "fr";
+  return "de";
 }
 
 function textResponse(text: string) {
