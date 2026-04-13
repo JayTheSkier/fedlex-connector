@@ -3,7 +3,7 @@ import { makeFedlexError } from "./types.js";
 
 // Rate limiter shared with SPARQL (separate bucket for filestore)
 let filestoreTimestamps: number[] = [];
-const MAX_REQUESTS_PER_SECOND = 10;
+const MAX_REQUESTS_PER_SECOND = 20;
 const FETCH_TIMEOUT_MS = 15_000;
 
 // Safety caps for fetchMultiPart. Measured ceiling: RS 220 (Code des
@@ -107,28 +107,42 @@ export async function fetchAllHtmlParts(urls: string[]): Promise<{ html: string;
   const multiPartMatch = url.match(/^(.+)-(\d+)(\.html)$/);
 
   if (multiPartMatch) {
-    return fetchMultiPart(multiPartMatch[1]!, multiPartMatch[3]!);
+    const expectedParts = parseInt(multiPartMatch[2]!, 10);
+    return fetchMultiPart(multiPartMatch[1]!, multiPartMatch[3]!, expectedParts);
   }
 
   // No part number suffix — single file
   return { html: await fetchHtml(url) };
 }
 
-async function fetchMultiPart(baseUrl: string, extension: string): Promise<{ html: string; warning?: string }> {
+async function fetchMultiPart(
+  baseUrl: string,
+  extension: string,
+  expectedParts: number,
+): Promise<{ html: string; warning?: string }> {
+  // Fetch parts 1..expectedParts in parallel, plus one extra as a safety
+  // probe in case the SPARQL hint under-counts.
+  const fetchCount = Math.min(expectedParts + 1, MAX_MULTIPART_PARTS);
+
+  const results = await Promise.all(
+    Array.from({ length: fetchCount }, (_, i) => {
+      const partNum = i + 1;
+      const url = `${baseUrl}-${partNum}${extension}`;
+      return tryFetchHtml(url)
+        .then((html) => ({ partNum, html, error: false as const }))
+        .catch(() => ({ partNum, html: null as string | null, error: true as const }));
+    })
+  );
+
+  // Process in part-number order, stopping at first placeholder/null/error.
   const parts: string[] = [];
-  let partNum = 1;
   let totalBytes = 0;
   let warning: string | undefined;
 
-  while (partNum <= MAX_MULTIPART_PARTS) {
-    const url = `${baseUrl}-${partNum}${extension}`;
-    let html: string | null;
-    try {
-      html = await tryFetchHtml(url);
-    } catch {
-      // Non-404 error (500, network failure, etc.)
+  for (const result of results) {
+    if (result.error) {
       if (parts.length > 0) {
-        warning = `WARNING: The text may be incomplete. An error occurred while fetching part ${partNum}. Parts 1\u2013${parts.length} were retrieved successfully.`;
+        warning = `WARNING: The text may be incomplete. An error occurred while fetching part ${result.partNum}. Parts 1\u2013${parts.length} were retrieved successfully.`;
         break;
       }
       throw makeFedlexError("FILESTORE_ERROR", "No HTML content found in filestore.", [
@@ -136,23 +150,17 @@ async function fetchMultiPart(baseUrl: string, extension: string): Promise<{ htm
       ]);
     }
 
-    // null = 404 (legitimate end of parts)
-    if (html === null || isPlaceholder(html)) {
+    if (result.html === null || isPlaceholder(result.html)) {
       break;
     }
 
-    parts.push(html);
-    totalBytes += html.length;
-    partNum++;
+    parts.push(result.html);
+    totalBytes += result.html.length;
 
     if (totalBytes >= MAX_MULTIPART_BYTES) {
       warning = `WARNING: The text may be incomplete. Stopped after ${(totalBytes / 1024 / 1024).toFixed(1)} MB (safety limit). Parts 1\u2013${parts.length} were retrieved successfully.`;
       break;
     }
-  }
-
-  if (!warning && partNum > MAX_MULTIPART_PARTS) {
-    warning = `WARNING: The text may be incomplete. Stopped after ${MAX_MULTIPART_PARTS} parts (safety limit). Parts 1\u2013${parts.length} were retrieved successfully.`;
   }
 
   if (parts.length === 0) {

@@ -24,7 +24,46 @@ Entry point (`src/index.ts`) detects `PORT` env var: if set, runs Express HTTP s
 - TypeScript strict mode — no `any` unless unavoidable
 - Shared types live in `src/types.ts`
 - SPARQL string literals must be escaped via `escapeSparqlString()` in `sparql.ts`
-- Both SPARQL and filestore have rate limiting (10 req/s) — don't bypass it
+- SPARQL has rate limiting (10 req/s), filestore has rate limiting (20 req/s) — don't bypass it
+
+## Testing on Claude.ai
+
+To test local changes on Claude.ai without touching production:
+
+The server has an `allowedHosts` whitelist in `src/index.ts` (inside `startHttpServer`).
+Only hostnames in that list can connect — requests from other hostnames get 403.
+Production uses `mcp.fedlex-connector.ch`. For local testing via a tunnel, you must
+temporarily add the tunnel hostname to that list.
+
+1. Start a cloudflared tunnel to get your temporary hostname:
+   ```bash
+   npx cloudflared tunnel --url http://localhost:3000
+   ```
+   It prints a random URL like `https://something-something.trycloudflare.com`.
+
+2. Add that hostname to the `allowedHosts` array in `src/index.ts`:
+   ```ts
+   allowedHosts: ["mcp.fedlex-connector.ch", "localhost", "127.0.0.1", "something-something.trycloudflare.com"],
+   ```
+
+3. Build and start the server in HTTP mode:
+   ```bash
+   npm run build
+   PORT=3000 node build/index.js
+   ```
+
+4. In Claude.ai → Settings → Integrations → Add MCP Server, paste the tunnel URL.
+
+5. Test your changes. The server logs `duration_ms` to the terminal for each tool call.
+
+6. When done:
+   - Ctrl-C cloudflared and the server
+   - **Revert the `allowedHosts` change in `src/index.ts`** — the tunnel hostname is
+     temporary and must not be committed. Each tunnel run generates a new random hostname.
+   - Remove the test connector from Claude.ai settings
+
+The tunnel URL dies when you stop cloudflared. Production (`mcp.fedlex-connector.ch`) is
+unaffected throughout — it runs on Railway from the `main` branch.
 
 ## External Services
 
