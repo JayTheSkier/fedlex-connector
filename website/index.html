@@ -212,6 +212,58 @@
       font-size: 0.8rem;
     }
 
+    .code-block {
+      position: relative;
+    }
+
+    .code-block pre {
+      padding-right: 72px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      transform: translateY(-50%);
+      font-family: var(--font);
+      font-size: 0.75rem;
+      color: var(--mid);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: var(--dark);
+      border-color: var(--dark);
+    }
+
+    .copy-btn:focus-visible {
+      outline: 2px solid var(--dark);
+      outline-offset: 1px;
+    }
+
+    .copy-btn.copied {
+      color: var(--bg);
+      background: var(--dark);
+      border-color: var(--dark);
+    }
+
+    .copy-btn.copied:hover {
+      color: var(--bg);
+      border-color: var(--dark);
+    }
+
+    .inline-icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      margin: 0 0.15em 0 0.25em;
+    }
+
     /* ---- Tools ---- */
 
     .tool {
@@ -465,9 +517,12 @@
     <section id="setup">
       <h2>Setup</h2>
       <p>The server is available at:</p>
-      <pre><code>https://mcp.fedlex-connector.ch</code></pre>
+      <div class="code-block">
+        <pre><code>https://mcp.fedlex-connector.ch</code></pre>
+        <button type="button" class="copy-btn" aria-label="Copy server URL">Copy</button>
+      </div>
 
-      <p>On claude.ai, desktop, or mobile: Settings &rarr; Connectors &rarr; Add custom connector, paste the URL. We suggest to name it &ldquo;Fedlex Connector&rdquo;.</p>
+      <p>On claude.ai or Claude Desktop: Customize<svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="2" y1="13" x2="22" y2="13"/><line x1="10" y1="12" x2="10" y2="14"/><line x1="14" y1="12" x2="14" y2="14"/></svg>(<em>Anpassen</em> / <em>Personnaliser</em> / <em>Personalizza</em>) &rarr; Connectors &rarr; Add connector<svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>&rarr; Add custom connector, paste the URL. We suggest to name it &ldquo;Fedlex Connector&rdquo;.</p>
       <p>On Claude Code: <code>claude mcp add --transport http Fedlex-Connector https://mcp.fedlex-connector.ch</code></p>
     </section>
 
@@ -507,7 +562,7 @@
       <h2>About</h2>
       <p>Built by Jeremy Bacharach. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;">&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;</a> &middot; <a href="https://www.linkedin.com/in/jeremy-bacharach-36bb97a8/">LinkedIn</a></p>
       <p>Feedback and contributions are welcome.</p>
-      <p>Last updated on 13 April 2026.</p>
+      <p>Last updated on 18 May 2026.</p>
     </section>
 
     <footer>
@@ -516,6 +571,28 @@
 
   </div>
 
+  <script>
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.parentElement.querySelector('code');
+        if (!code) return;
+        var text = code.textContent.trim();
+        var done = function () {
+          var original = btn.dataset.original || btn.textContent;
+          btn.dataset.original = original;
+          btn.textContent = '✓ Copied';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () {});
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
