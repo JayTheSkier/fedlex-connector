@@ -19,7 +19,7 @@ This MCP server bridges the gap: it queries SPARQL for metadata (RS numbers, con
 
 ## Setup
 
-The server supports two transports: **stdio** for local use (Claude Code, Claude Desktop) and **HTTP** for remote use (claude.ai, mobile). You can use one or both.
+The server supports two transports: **stdio** for local use (Claude Code, Claude Desktop) and **HTTP** for remote use (claude.ai). You can use one or both.
 
 The server is hosted at:
 
@@ -27,14 +27,15 @@ The server is hosted at:
 https://mcp.fedlex-connector.ch
 ```
 
-**claude.ai / Claude Desktop / Claude mobile:**
+**claude.ai / Claude Desktop:**
 
 1. Go to [claude.ai](https://claude.ai)
-2. Click your profile icon → **Customize**
-3. Scroll to **Connectors** → **Add custom connector**
-4. Enter the URL: `https://mcp.fedlex-connector.ch`
+2. Click **Customize** (*Anpassen* / *Personnaliser* / *Personalizza*) in the sidebar
+3. Click **Connectors**
+4. Click **+** → **Add connector**
+5. Click **Add custom connector** and paste the URL: `https://mcp.fedlex-connector.ch`
 
-The connector syncs across claude.ai, Claude Desktop, and the Claude mobile app.
+We suggest naming it "Fedlex Connector".
 
 **Claude Code:**
 
