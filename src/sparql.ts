@@ -102,6 +102,12 @@ export async function findWorkByRsNumber(
 /**
  * Get the latest consolidation (dated version) for a ConsolidationAbstract.
  * Each consolidation has a dateApplicability and is linked via isMemberOf.
+ *
+ * Date bounds use the xsd:date("…") constructor rather than the "…"^^xsd:date
+ * literal form: on Fedlex's Virtuoso endpoint the literal form mis-optimizes
+ * `<=`/`>=` comparisons for some abstracts (e.g. RS 702, 0.810.2), silently
+ * dropping rows or returning none. The constructor form is reliable. Don't
+ * "simplify" it back to a typed literal.
  */
 export async function getLatestConsolidation(
   abstractUri: string,
@@ -115,7 +121,7 @@ export async function getLatestConsolidation(
     SELECT ?consolidation ?date WHERE {
       ?consolidation jolux:isMemberOf <${abstractUri}> ;
                      jolux:dateApplicability ?date .
-      FILTER(?date <= "${today}"^^xsd:date)
+      FILTER(?date <= xsd:date("${today}"))
     } ORDER BY DESC(?date) LIMIT 1
   `;
 
@@ -227,7 +233,7 @@ export async function listAmendments(
       ?consolidation jolux:isMemberOf <${abstractUri}> ;
                      jolux:dateApplicability ?dateStart .
       OPTIONAL { ?consolidation jolux:dateEndApplicability ?dateEnd }
-      FILTER(?dateStart >= "${since}"^^xsd:date)
+      FILTER(?dateStart >= xsd:date("${since}"))
     } ORDER BY DESC(?dateStart) LIMIT 50
   `;
 
