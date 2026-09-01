@@ -1,0 +1,32 @@
+{
+  "name": "fedlex-connector",
+  "version": "0.1.0",
+  "description": "Access Swiss federal legislation from Fedlex through MCP.",
+  "author": {
+    "name": "Jeremy Bacharach",
+    "email": "jeremy@bacharach.ch",
+    "url": "https://fedlex-connector.ch"
+  },
+  "homepage": "https://fedlex-connector.ch",
+  "repository": "https://github.com/jeremybacharach/fedlex-connector",
+  "license": "MIT",
+  "keywords": ["mcp", "fedlex", "swiss-law", "legal-research"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Fedlex Connector",
+    "shortDescription": "Search and read Swiss federal law from Fedlex.",
+    "longDescription": "Fedlex Connector exposes Swiss federal legislation from the official Fedlex SPARQL endpoint and HTML filestore through read-only MCP tools.",
+    "developerName": "Jeremy Bacharach",
+    "category": "Productivity",
+    "capabilities": ["MCP", "Search", "Read"],
+    "websiteURL": "https://fedlex-connector.ch",
+    "defaultPrompt": [
+      "Find the Swiss data protection act.",
+      "Get art. 1 of the Swiss Civil Code.",
+      "List recent changes to RS 220."
+    ],
+    "brandColor": "#D52B1E"
+  },
+  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json"
+}
