@@ -7,6 +7,8 @@ import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js
 import { createFedlexServer } from "./server.js";
 
 const PORT = process.env["PORT"] ? parseInt(process.env["PORT"], 10) : undefined;
+const DEFAULT_ALLOWED_HOSTS = ["mcp.fedlex-connector.ch", "localhost", "127.0.0.1"];
+const activeHttpServers: ReturnType<ReturnType<typeof createMcpExpressApp>["listen"]>[] = [];
 
 async function main() {
   if (PORT) {
@@ -32,10 +34,10 @@ async function startStdioServer() {
 async function startHttpServer(port: number) {
   const app = createMcpExpressApp({
     host: "0.0.0.0",
-    allowedHosts: ["mcp.fedlex-connector.ch", "localhost", "127.0.0.1"],
+    allowedHosts: getAllowedHosts(),
   });
 
-  app.post("/", async (req: Request, res: Response) => {
+  const handleMcpPost = async (req: Request, res: Response) => {
     const server = createFedlexServer();
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
@@ -59,9 +61,12 @@ async function startHttpServer(port: number) {
       transport.close();
       server.close();
     });
-  });
+  };
 
-  app.get("/", (_req: Request, res: Response) => {
+  app.post("/", handleMcpPost);
+  app.post("/mcp", handleMcpPost);
+
+  const methodNotAllowed = (_req: Request, res: Response) => {
     res.writeHead(405).end(
       JSON.stringify({
         jsonrpc: "2.0",
@@ -69,25 +74,29 @@ async function startHttpServer(port: number) {
         id: null,
       })
     );
-  });
+  };
 
-  app.delete("/", (_req: Request, res: Response) => {
-    res.writeHead(405).end(
-      JSON.stringify({
-        jsonrpc: "2.0",
-        error: { code: -32000, message: "Method not allowed." },
-        id: null,
-      })
-    );
-  });
+  app.get("/", methodNotAllowed);
+  app.get("/mcp", methodNotAllowed);
+  app.delete("/", methodNotAllowed);
+  app.delete("/mcp", methodNotAllowed);
 
   app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "ok", server: "fedlex-connector", version: "1.0.0" });
   });
 
-  app.listen(port, "0.0.0.0", () => {
+  const httpServer = app.listen(port, "0.0.0.0", () => {
     console.log(`Fedlex Connector listening on http://0.0.0.0:${port}`);
   });
+  activeHttpServers.push(httpServer);
+}
+
+function getAllowedHosts(): string[] {
+  const configured = process.env["ALLOWED_HOSTS"]?.split(",")
+    .map((host) => host.trim())
+    .filter(Boolean);
+
+  return configured && configured.length > 0 ? configured : DEFAULT_ALLOWED_HOSTS;
 }
 
 main().catch((e) => {
