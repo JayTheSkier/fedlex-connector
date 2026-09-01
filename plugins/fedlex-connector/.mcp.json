@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "fedlex": {
+      "type": "http",
+      "enabled": true,
+      "url": "https://mcp.fedlex-connector.ch/mcp"
+    }
+  }
+}

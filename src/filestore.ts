@@ -94,7 +94,9 @@ function isPlaceholder(html: string): boolean {
   return !html.includes('id="lawcontent"') && !html.includes('class="absatz"');
 }
 
-export async function fetchAllHtmlParts(urls: string[]): Promise<{ html: string; warning?: string }> {
+export async function fetchAllHtmlParts(
+  urls: string[]
+): Promise<{ html: string; sourceUrls: string[]; warning?: string }> {
   if (urls.length === 0) {
     throw makeFedlexError("FILESTORE_ERROR", "No HTML URLs found for this consolidation.", [
       "Try a different consolidation date or language.",
@@ -112,14 +114,14 @@ export async function fetchAllHtmlParts(urls: string[]): Promise<{ html: string;
   }
 
   // No part number suffix — single file
-  return { html: await fetchHtml(url) };
+  return { html: await fetchHtml(url), sourceUrls: [url] };
 }
 
 async function fetchMultiPart(
   baseUrl: string,
   extension: string,
   expectedParts: number,
-): Promise<{ html: string; warning?: string }> {
+): Promise<{ html: string; sourceUrls: string[]; warning?: string }> {
   // Fetch parts 1..expectedParts in parallel, plus one extra as a safety
   // probe in case the SPARQL hint under-counts.
   const fetchCount = Math.min(expectedParts + 1, MAX_MULTIPART_PARTS);
@@ -129,13 +131,14 @@ async function fetchMultiPart(
       const partNum = i + 1;
       const url = `${baseUrl}-${partNum}${extension}`;
       return tryFetchHtml(url)
-        .then((html) => ({ partNum, html, error: false as const }))
-        .catch(() => ({ partNum, html: null as string | null, error: true as const }));
+        .then((html) => ({ partNum, url, html, error: false as const }))
+        .catch(() => ({ partNum, url, html: null as string | null, error: true as const }));
     })
   );
 
   // Process in part-number order, stopping at first placeholder/null/error.
   const parts: string[] = [];
+  const sourceUrls: string[] = [];
   let totalBytes = 0;
   let warning: string | undefined;
 
@@ -155,6 +158,7 @@ async function fetchMultiPart(
     }
 
     parts.push(result.html);
+    sourceUrls.push(result.url);
     totalBytes += result.html.length;
 
     if (totalBytes >= MAX_MULTIPART_BYTES) {
@@ -169,7 +173,7 @@ async function fetchMultiPart(
     ]);
   }
 
-  return { html: parts.join("\n"), warning };
+  return { html: parts.join("\n"), sourceUrls, warning };
 }
 
 export function extractArticle(html: string, articleNumber: string): string | null {

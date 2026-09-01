@@ -1,6 +1,15 @@
 node_modules
 build
+coverage
 .claude
+.agents
+.codex
 .DS_Store
 .git
 website
+docs
+plugins
+test
+.env
+.env.*
+npm-debug.log*
