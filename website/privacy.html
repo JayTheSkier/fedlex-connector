@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Privacy Policy – Fedlex Connector</title>
+  <meta name="description" content="How Fedlex Connector processes personal data in connection with your use of the service.">
+  <link rel="canonical" href="https://fedlex-connector.ch/privacy">
+  <meta name="robots" content="index,follow">
+  <meta http-equiv="content-language" content="en">
+  <meta name="author" content="Jeremy Bacharach">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #111;
+      --dark: #333;
+      --mid: #666;
+      --light: #999;
+      --border: #ddd;
+      --bg: #fff;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --black: #eee;
+        --dark: #ccc;
+        --mid: #bbb;
+        --light: #999;
+        --border: #333;
+        --bg: #111;
+      }
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font);
+      color: var(--dark);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Layout ---- */
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      overflow-x: hidden;
+    }
+
+    section {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    /* ---- Header ---- */
+
+    header {
+      padding: 32px 0 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header .brand {
+      font-family: "Jost", var(--font);
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--black);
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: none;
+      width: fit-content;
+    }
+
+    .icon {
+      display: inline-block;
+      width: 51px;
+      height: 40px;
+      margin: -4px 0;
+      background: url(logo.svg) center/contain no-repeat;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .icon {
+        filter: invert(1);
+      }
+    }
+
+    header p {
+      font-family: "Jost", var(--font);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--mid);
+    }
+
+    /* ---- Typography ---- */
+
+    h1 {
+      font-family: "Jost", var(--font);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--black);
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+
+    h2 {
+      font-family: "Jost", var(--font);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--black);
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    .subtle {
+      font-size: 0.825rem;
+      color: var(--light);
+      margin-bottom: 12px;
+    }
+
+    strong { font-weight: 600; color: var(--black); }
+
+    a {
+      color: var(--dark);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    a:hover { border-color: var(--dark); }
+
+    /* ---- Nav ---- */
+
+    .toc {
+      padding: 16px 0;
+      font-family: "Jost", var(--font);
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .toc a {
+      color: var(--light);
+      border-bottom: none;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--dark);
+    }
+
+    /* ---- Footer ---- */
+
+    footer {
+      padding: 16px 0;
+      font-size: 0.8rem;
+      color: var(--light);
+    }
+
+    footer a { color: var(--light); }
+    footer a:hover { color: var(--dark); }
+
+    /* ---- Responsive ---- */
+
+    @media (max-width: 480px) {
+      header { padding: 24px 0 16px; }
+      section { padding: 16px 0; }
+      header .brand { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <a class="brand" href="/"><span class="icon"></span>Fedlex Connector</a>
+      <p>An MCP connector that gives Claude direct access to Swiss federal legislation on Fedlex.</p>
+    </header>
+
+    <nav class="toc">
+      <a href="/">&larr; Back to home</a>
+    </nav>
+
+    <main>
+
+      <section>
+        <h1>Privacy Policy</h1>
+        <p class="subtle">Version of 7 October 2026</p>
+        <p>In this privacy policy (the &ldquo;<strong>Privacy Policy</strong>&rdquo;) we explain how we process personal data in connection with your use of Fedlex Connector, a service described at <a href="https://fedlex-connector.ch">https://fedlex-connector.ch</a> (the &ldquo;<strong>Service</strong>&rdquo;).</p>
+      </section>
+
+      <section id="who">
+        <h2>1. Who are we?</h2>
+        <p>The party responsible as data controller for the processing of your personal data described in this Privacy Policy is Jeremy Bacharach.</p>
+        <p>In case of any questions or requests relating to this Privacy Policy or to the processing of your personal data you can contact us at <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;">&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;</a>.</p>
+      </section>
+
+      <section id="data">
+        <h2>2. What personal data do we process?</h2>
+        <p>We do not process personal data when providing the Service, except for limited data relating to your use of the Service: your query (the tool called and its parameters), the IP address from which the request is sent, the client software used (user agent), the date and time of the request, and technical information about the request and its processing.</p>
+        <p>Although unsolicited and unnecessary for the operation of the Service, we may also process any personal data that you provide us when using our Service (e.g. in the Service inputs).</p>
+      </section>
+
+      <section id="purposes">
+        <h2>3. Why do we process personal data?</h2>
+        <p>Where applicable, we process personal data to/for: (a) analyze, provide, improve and develop our Service; (b) communicate with you and process your potential requests or inquiries; (c) conduct market research and understand customer interests; (d) manage administrative and technical aspects of our operations; (e) comply with applicable law; (f) assert and defend our rights; (g) network and information security; and/or (h) to ensure the security of our Service, systems and resources.</p>
+      </section>
+
+      <section id="sharing">
+        <h2>4. Do we share personal data?</h2>
+        <p>We may transfer personal data to third parties. These third parties can process data on our behalf or, as the case may be, for their own purposes. Third party data recipients that may receive personal data from us are: (a) service providers and subcontractors; (b) IT providers (in particular for data management, telecommunications, data storage and hosting and IT security); (c) analytics and reporting vendors; (d) professional advisors; (e) authorities, courts and regulators; (f) and/or other parties involved in legal proceedings.</p>
+        <p>We process personal data in Switzerland. In connection with the Service, your personal data may be transferred to and processed in countries outside of Switzerland, including countries that do not offer a level of data protection equivalent to Swiss law, such as the United States. Following any such transfer, your data will no longer benefit from Swiss data protection law and may notably be subject to processing, disclosure, or access by local authorities under the laws of the receiving country. By using the Service, you acknowledge and accept these privacy risks and expressly consent to the transfer of your personal data to any country in the world, including countries without adequate data protection, for the purposes described in this Privacy Policy. If you do not agree to such transfers, you must discontinue your use of the Service immediately.</p>
+      </section>
+
+      <section id="updates">
+        <h2>5. Privacy Policy Updates</h2>
+        <p>We can update this Privacy Policy at any time without prior notice. The current version published on <a href="https://fedlex-connector.ch/privacy">https://fedlex-connector.ch/privacy</a> is authoritative. Regularly consult this Privacy Policy to stay up to date.</p>
+      </section>
+
+    </main>
+
+    <footer>
+      &copy; 2026 Jeremy Bacharach &middot; MIT License &middot; <a href="/privacy">Privacy Policy</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
