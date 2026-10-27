@@ -220,6 +220,17 @@
       padding-right: 72px;
     }
 
+    .code-block.wrap pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 0.8rem;
+    }
+
+    .code-block.wrap .copy-btn {
+      top: 8px;
+      transform: none;
+    }
+
     .copy-btn {
       position: absolute;
       top: 50%;
@@ -502,7 +513,7 @@
     <section id="what">
       <h2>What it does</h2>
       <p>Fedlex Connector gives <a href="https://claude.ai">Claude</a> direct access to <a href="https://www.fedlex.admin.ch">Fedlex</a>, the official publication platform for Swiss federal law. It lets Claude query individual articles or whole acts from the Classified Compilation (SR, RS) in German, French, and Italian. The result is less wasted reasoning and greater accuracy when using Claude for legal research within Swiss federal law.</p>
-      <p>Fedlex Connector is free to use and open source. As of August 2026, it processes over 20&#8239;000 queries per month. It is a private project, and it is not operated by the Federal Chancellery. Only the publications of the Federal Chancellery are authoritative.</p>
+      <p>Fedlex Connector is free to use and open source. As of October 2026, it processes over 100&#8239;000 queries per month. It is a private project, and it is not operated by the Federal Chancellery. Only the publications of the Federal Chancellery are authoritative.</p>
     </section>
 
     <!-- Why -->
@@ -524,6 +535,12 @@
 
       <p>On claude.ai or Claude Desktop: Customize<svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="2" y1="13" x2="22" y2="13"/><line x1="10" y1="12" x2="10" y2="14"/><line x1="14" y1="12" x2="14" y2="14"/></svg>(<em>Anpassen</em> / <em>Personnaliser</em> / <em>Personalizza</em>) &rarr; Connectors &rarr; Add connector<svg class="inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>&rarr; Add custom connector, paste the URL. We suggest to name it &ldquo;Fedlex Connector&rdquo;.</p>
       <p>On Claude Code: <code>claude mcp add --transport http Fedlex-Connector https://mcp.fedlex-connector.ch</code></p>
+
+      <p>To use Fedlex Connector with other agents than Claude, run the prompt below directly in your chatbot:</p>
+      <div class="code-block wrap">
+        <pre><code>Assess whether I can connect https://fedlex-connector.ch to your environment. It is a free and publicly accessible MCP server without OAuth. Make sure beforehand that you have identified your environment and that you are up to date with the functioning of your user interface. If it can be connected, provide a step-by-step guide, and explain how I can activate it in chats.</code></pre>
+        <button type="button" class="copy-btn" aria-label="Copy prompt">Copy</button>
+      </div>
     </section>
 
     <!-- Tools -->
@@ -562,7 +579,7 @@
       <h2>About</h2>
       <p>Built by Jeremy Bacharach. <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;">&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#98;&#97;&#99;&#104;&#97;&#114;&#97;&#99;&#104;&#46;&#99;&#104;</a> &middot; <a href="https://www.linkedin.com/in/jeremy-bacharach-36bb97a8/">LinkedIn</a></p>
       <p>Feedback and contributions are welcome.</p>
-      <p>Last updated on 30 August 2026.</p>
+      <p>Last updated on 27 October 2026.</p>
     </section>
 
     <footer>
