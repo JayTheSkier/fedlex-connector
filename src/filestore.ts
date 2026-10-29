@@ -111,7 +111,7 @@ export async function fetchAllHtmlParts(urls: string[]): Promise<{ html: string;
     return fetchMultiPart(multiPartMatch[1]!, multiPartMatch[3]!, expectedParts);
   }
 
-  // No part number suffix — single file
+  // No part number suffix - single file
   return { html: await fetchHtml(url) };
 }
 
@@ -175,9 +175,9 @@ async function fetchMultiPart(
 export function extractArticle(html: string, articleNumber: string): string | null {
   const $ = cheerio.load(html);
 
-  // Normalize article number: "28a" → "28_a", "28bis" → "28_bis"
+  // Normalize article number: "28a"  "28_a", "28bis"  "28_bis"
   const normalizedNum = articleNumber.trim().toLowerCase();
-  // Insert underscore between digits and letters: "28a" → "28_a"
+  // Insert underscore between digits and letters: "28a"  "28_a"
   const withUnderscore = normalizedNum.replace(/(\d)([a-z])/gi, "$1_$2");
 
   // Try multiple ID patterns used by Fedlex
@@ -274,7 +274,7 @@ export function extractFullText(html: string): string {
 
   // Fallback: extract from body, skipping script/style
   $("script, style, nav, footer, header").remove();
-  return $("body").text().replace(/\n{3,}/g, "\n\n").trim();
+  return elementToText($, $("body"));
 }
 
 export function listArticleIds(html: string): string[] {
@@ -349,6 +349,21 @@ function elementToText(
   const clone = el.clone();
   clone.find("script, style").remove();
 
+  // Normalize references before headings, paragraphs and table cells call
+  // .text(). Plain <sup> nodes also contain paragraph numbers and exponents,
+  // so identify footnotes by their links (including backlinks) or legacy class.
+  clone.find('a[href*="#fn-"], a[href*="#fnbck-"]').each((_, node) => {
+    const reference = $(node);
+    const label = reference.text().trim();
+    if (label) reference.text(` [footnote ${label}] `);
+  });
+  clone.find("sup.fn").each((_, node) => {
+    const reference = $(node);
+    if (reference.find('a[href*="#fn-"], a[href*="#fnbck-"]').length) return;
+    const label = reference.text().trim();
+    if (label) reference.text(` [footnote ${label}] `);
+  });
+
   // Convert to readable text preserving structure
   const lines: string[] = [];
   processNode($, clone, lines, 0);
@@ -371,7 +386,13 @@ function processNode(
       const tagName = (node as any).tagName?.toLowerCase();
       const child = $(node);
 
-      if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(tagName)) {
+      if (child.hasClass("footnotes")) {
+        lines.push("", "Footnotes:");
+        child.children("p").each((__, note) => {
+          lines.push($(note).text().trim());
+        });
+        lines.push("");
+      } else if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(tagName)) {
         lines.push("");
         lines.push(child.text().trim());
         lines.push("");
@@ -395,8 +416,6 @@ function processNode(
             });
           lines.push(cells.join(" | "));
         });
-      } else if (tagName === "sup" && child.hasClass("fn")) {
-        // Footnote reference — skip inline
       } else {
         processNode($, child, lines, depth + 1);
       }
