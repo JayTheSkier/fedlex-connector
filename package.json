@@ -8,6 +8,7 @@
     "fedlex-connector": "./build/index.js"
   },
   "scripts": {
+    "test": "tsc && node --test test/*.test.mjs",
     "build": "tsc",
     "start": "node build/index.js",
     "start:http": "PORT=3000 node build/index.js",
